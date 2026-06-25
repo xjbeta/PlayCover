@@ -538,6 +538,9 @@
 "settings.toggle.disableBuiltinMouse.help" = "禁用应用内置的鼠标支持，避免与键盘映射产生鼠标点击冲突";
 "settings.toggle.floatingWindow" = "窗口浮动在最前面";
 "settings.picker.adaptiveRes.6" = "自由缩放";
+"settings.picker.forcedRefreshRate" = "刷新率：";
+"settings.picker.forcedRefreshRate.help" = "强制应用请求特定的显示器刷新率";
+"settings.picker.forcedRefreshRate.default" = "默认刷新率";
 "settings.picker.aspectRatio.free" = "自由";
 "settings.picker.aspectRatio.custom" = "自定义";
 "settings.toggle.blockSleepSpamming" = "阻止频繁调用 usleep 函数";

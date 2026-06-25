@@ -189,10 +189,9 @@ struct ExtraAppSettingsData: Codable {
     var fixPlayChainSecKey = false
     var minecraftEnhanceScrollWheel = false
     var skipAppleSignInStateCheck = false
-    var fixPlayChainCreateKey = false
-    var createMetalCacheSymlink = false
+    var fixPlayChainCreateKey = false    var createMetalCacheSymlink = false
     var lordOfMysteriesLandscapeWebview = false
-
+    var forcedRefreshRate: Int = 0
     init() {}
 
     init(from decoder: Decoder) throws {
@@ -269,7 +268,7 @@ struct ExtraAppSettingsData: Codable {
         fixPlayChainCreateKey = try container.decodeIfPresent(Bool.self, forKey: .fixPlayChainCreateKey) ?? false
         createMetalCacheSymlink = try container.decodeIfPresent(Bool.self, forKey: .createMetalCacheSymlink) ?? false
         lordOfMysteriesLandscapeWebview = try container.decodeIfPresent(Bool.self, forKey: .lordOfMysteriesLandscapeWebview) ?? false
-    }
+        forcedRefreshRate = try container.decodeIfPresent(Int.self, forKey: .forcedRefreshRate) ?? 0    }
 
     mutating func applyOverrides(_ overrides: [String: Any]) {
         guard !overrides.isEmpty else { return }
@@ -344,6 +343,7 @@ struct ExtraAppSettingsData: Codable {
         if let val = overrides["fixPlayChainCreateKey"] as? Bool { fixPlayChainCreateKey = val }
         if let val = overrides["createMetalCacheSymlink"] as? Bool { createMetalCacheSymlink = val }
         if let val = overrides["lordOfMysteriesLandscapeWebview"] as? Bool { lordOfMysteriesLandscapeWebview = val }
+        if let val = overrides["forcedRefreshRate"] as? Int { forcedRefreshRate = val }
     }
 }
 // swiftlint:enable function_body_length line_length cyclomatic_complexity

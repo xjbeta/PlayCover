@@ -288,6 +288,9 @@
 "settings.picker.adaptiveRes.1" = "Auto (Based on Display)";
 "settings.picker.adaptiveRes.5" = "Custom";
 "settings.picker.adaptiveRes.6" = "Resizable";
+"settings.picker.forcedRefreshRate" = "Refresh Rate:";
+"settings.picker.forcedRefreshRate.help" = "Forces the app to request a specific display refresh rate";
+"settings.picker.forcedRefreshRate.default" = "App Default";
 "settings.text.customHeight" = "Height";
 "settings.text.customWidth" = "Width";
 "settings.text.detectedResolution" = "Detected Resolution:";

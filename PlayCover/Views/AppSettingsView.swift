@@ -291,6 +291,23 @@ struct GraphicsView: View {
                     .help("settings.picker.adaptiveRes.help")
                 }
                 HStack {
+                    Text("settings.picker.forcedRefreshRate")
+                    Spacer()
+                    Picker("", selection: $settings.extraSettings.forcedRefreshRate) {
+                        Text("settings.picker.forcedRefreshRate.default").tag(0)
+                        Text("75 Hz").tag(75)
+                        Text("90 Hz").tag(90)
+                        Text("100 Hz").tag(100)
+                        Text("120 Hz").tag(120)
+                        Text("144 Hz").tag(144)
+                        Text("165 Hz").tag(165)
+                        Text("180 Hz").tag(180)
+                        Text("240 Hz").tag(240)
+                    }
+                    .frame(width: 250, alignment: .leading)
+                    .help("settings.picker.forcedRefreshRate.help")
+                }
+                HStack {
                     if settings.settings.resolution == 5 {
                         Text(NSLocalizedString("settings.text.customWidth", comment: "") + ":")
                         Stepper {
