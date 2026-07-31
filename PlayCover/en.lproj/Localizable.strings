@@ -102,6 +102,12 @@
 "settings.toggle.hideiOSAppOnMac" = "Hide iOSAppOnMac";
 "settings.toggle.weLinkCloudGameForceTouchMode" = "Force Touch Mode for WeLink Cloud Games";
 "settings.toggle.wuwaCloudGameFixMouseIssue" = "Fix Wuwa Cloud Game Mouse issue";
+"settings.button.endfieldApplyPatch" = "Endfield Resolution Patch";
+"alert.endfieldPatch.title" = "Apply Resolution Patch";
+"alert.endfieldPatch.message" = "Patches UnityFramework to lock render resolution to %dx%d and force FSR3 to Native mode. Original binary will be backed up to .bak. Proceed?";
+"alert.endfieldPatch.result" = "Patch Result";
+"alert.endfieldPatch.success" = "Patch applied successfully: %@";
+"alert.endfieldPatch.failure" = "Patch failed: %@";
 "settings.toggle.delayKeymapInitialization" = "Delay Keymap Initialization";
 "settings.toggle.fixPlayChainSecKey" = "Fix PlayChain SecKey issue";
 "settings.toggle.minecraftEnhanceScrollWheel" = "Enhance Minecraft Scroll Wheel (Experimental)";

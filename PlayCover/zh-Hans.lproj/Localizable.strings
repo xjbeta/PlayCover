@@ -102,6 +102,12 @@
 "settings.toggle.hideiOSAppOnMac" = "屏蔽iOSAppOnMac";
 "settings.toggle.weLinkCloudGameForceTouchMode" = "强制WeLink云游戏启用触屏模式";
 "settings.toggle.wuwaCloudGameFixMouseIssue" = "修复云鸣潮鼠标适配问题";
+"settings.button.endfieldApplyPatch" = "终末地分辨率补丁";
+"alert.endfieldPatch.title" = "应用分辨率补丁";
+"alert.endfieldPatch.message" = "将修改 UnityFramework 以锁定渲染分辨率为 %dx%d 并强制 FSR3 为 Native 模式,原版二进制将备份到 .bak。是否继续?";
+"alert.endfieldPatch.result" = "补丁结果";
+"alert.endfieldPatch.success" = "补丁应用成功: %@";
+"alert.endfieldPatch.failure" = "补丁应用失败: %@";
 "settings.toggle.delayKeymapInitialization" = "延迟初始化按键映射";
 "settings.toggle.fixPlayChainSecKey" = "修复PlayChain未正确处理SecKey的问题";
 "settings.toggle.minecraftEnhanceScrollWheel" = "优化Minecraft鼠标滚轮（试验阶段）";

@@ -84,7 +84,7 @@ struct AppSettingsView: View {
                     }
                     .tag(0)
                     .disabled(!(hasPlayTools ?? true))
-                GraphicsView(settings: $viewModel.settings)
+                GraphicsView(settings: $viewModel.settings, app: viewModel.app)
                     .tabItem {
                         Text("settings.tab.graphics")
                     }
@@ -218,14 +218,30 @@ struct KeymappingView: View {
 // swiftlint:disable:next type_body_length
 struct GraphicsView: View {
     @Binding var settings: AppSettings
+    var app: PlayApp
     @State var customWidth = 1920
     @State var customHeight = 1080
     @State var showResolutionWarning = false
+    @State var showEndfieldPatchAlert = false
+    @State var endfieldPatchResult: String?
     @AppStorage("settings.settings.inverseScreenValues") private var inverseScreenValues = false
     @AppStorage("settings.settings.disableTimeout") private var disableTimeout = false
     @AppStorage("settings.toggle.hideTitleBar") private var hideTitleBar = false
     @AppStorage("settings.toggle.floatingWindow") private var floatingWindow = false
     @AppStorage("settings.settings.displayRotation") private var displayRotation = 0
+
+    private var isEndfield: Bool {
+        app.info.bundleIdentifier == "com.hypergryph.endfield"
+    }
+
+    /// 渲染分辨率 = 窗口分辨率 × customScaler
+    private var renderWidth: Int {
+        Int(Double(settings.settings.windowWidth) * customScaler)
+    }
+    private var renderHeight: Int {
+        Int(Double(settings.settings.windowHeight) * customScaler)
+    }
+
     static var number: NumberFormatter {
         let formatter = NumberFormatter()
         formatter.numberStyle = .none
@@ -289,6 +305,16 @@ struct GraphicsView: View {
                     }
                     .frame(width: 250, alignment: .leading)
                     .help("settings.picker.adaptiveRes.help")
+                }
+                if isEndfield {
+                    HStack {
+                        Spacer()
+                        Button("settings.button.endfieldApplyPatch") {
+                            showEndfieldPatchAlert = true
+                        }
+                        .padding(.leading, 8)
+                        .frame(width: 250, alignment: .leading)
+                    }
                 }
                 HStack {
                     Text("settings.picker.forcedRefreshRate")
@@ -473,6 +499,33 @@ struct GraphicsView: View {
             .onChange(of: settings.settings.resizableAspectRatioType) { _ in
                 setAspectRatioForResizableWindow()
             }
+        }
+        .alert("alert.endfieldPatch.title", isPresented: $showEndfieldPatchAlert) {
+            Button("button.OK") {
+                let result = EndfieldPatch.apply(to: app.url,
+                                                 width: renderWidth,
+                                                 height: renderHeight)
+                switch result {
+                case .success(let res):
+                    endfieldPatchResult = String(
+                        format: NSLocalizedString("alert.endfieldPatch.success", comment: ""), res)
+                case .failure(let error):
+                    endfieldPatchResult = String(
+                        format: NSLocalizedString("alert.endfieldPatch.failure", comment: ""),
+                        error.localizedDescription)
+                }
+            }
+            Button("button.Cancel", role: .cancel) {}
+        } message: {
+            Text(String(format: NSLocalizedString("alert.endfieldPatch.message", comment: ""),
+                        renderWidth, renderHeight))
+        }
+        .alert("alert.endfieldPatch.result",
+               isPresented: Binding(get: { endfieldPatchResult != nil },
+                                    set: { if !$0 { endfieldPatchResult = nil } })) {
+            Button("button.OK") {}
+        } message: {
+            Text(endfieldPatchResult ?? "")
         }
     }
 
@@ -1558,7 +1611,6 @@ struct ExtrasView: View {
                         Spacer()
                     }
                 }
-
                 Spacer().frame(height: 16)
                 HStack {
                     Button(!showAllOptions ? "settings.button.extras.showAllOptions" :

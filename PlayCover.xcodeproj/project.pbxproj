@@ -90,6 +90,7 @@
 		B429B2642DC204FA001FF7D9 /* VersionCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = B429B2632DC204F1001FF7D9 /* VersionCheck.swift */; };
 		B44B40372C1E315600CE2A3E /* GoogleDrive.swift in Sources */ = {isa = PBXBuildFile; fileRef = B44B40362C1E315600CE2A3E /* GoogleDrive.swift */; };
 		B44E8CD32C31C50200542038 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = B44E8CD22C31C50200542038 /* SwiftSoup */; };
+		B4EFD0012D5A000100F3A001 /* EndfieldPatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4EFD0002D5A000100F3A001 /* EndfieldPatch.swift */; };
 		B6603E1128E206A300DEFA3F /* UninstallSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6603E1028E206A300DEFA3F /* UninstallSettings.swift */; };
 		B6603E1328E2257800DEFA3F /* Uninstaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6603E1228E2257800DEFA3F /* Uninstaller.swift */; };
 		B67BC7122C39354C00315011 /* UpdateScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67BC7112C39354500315011 /* UpdateScheme.swift */; };
@@ -207,6 +208,7 @@
 		B429B2632DC204F1001FF7D9 /* VersionCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionCheck.swift; sourceTree = "<group>"; };
 		B44B40362C1E315600CE2A3E /* GoogleDrive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GoogleDrive.swift; path = PlayCover/Utils/GoogleDrive.swift; sourceTree = SOURCE_ROOT; };
 		B490E8692C0D0E8A004383FA /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
+		B4EFD0002D5A000100F3A001 /* EndfieldPatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndfieldPatch.swift; sourceTree = "<group>"; };
 		B6603E1028E206A300DEFA3F /* UninstallSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UninstallSettings.swift; sourceTree = "<group>"; };
 		B6603E1228E2257800DEFA3F /* Uninstaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Uninstaller.swift; sourceTree = "<group>"; };
 		B67BC7112C39354500315011 /* UpdateScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateScheme.swift; sourceTree = "<group>"; };
@@ -356,6 +358,7 @@
 				5314D1ED26C402EC00A0A727 /* Shell.swift */,
 				92B4D38E2737CF3D0001D7BB /* PlayTools.swift */,
 				6E550A8A29BA507200EFC15C /* Macho.swift */,
+				B4EFD0002D5A000100F3A001 /* EndfieldPatch.swift */,
 				68E48B9B295709BF00C39879 /* Cacher.swift */,
 				92A8AAC8275EFEA800D89B50 /* SystemConfig.swift */,
 				92F8500927675124005CE6BE /* AppIntegrity.swift */,
@@ -680,6 +683,7 @@
 				6E250971297F5281004D754C /* SigningSetupView.swift in Sources */,
 				928C01D9272E162C007EB2DF /* InstallVM.swift in Sources */,
 				6E550A8B29BA507200EFC15C /* Macho.swift in Sources */,
+				B4EFD0012D5A000100F3A001 /* EndfieldPatch.swift in Sources */,
 				6E25096F297F5032004D754C /* FileExtensions.swift in Sources */,
 				53F4D2A026C43C690020167C /* Log.swift in Sources */,
 				92490BDC303F2E210069EC79 /* DeclaredAgeRangeKit.swift in Sources */,
