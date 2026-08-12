@@ -108,6 +108,8 @@
 "alert.endfieldPatch.result" = "补丁结果";
 "alert.endfieldPatch.success" = "补丁应用成功: %@";
 "alert.endfieldPatch.failure" = "补丁应用失败: %@";
+"settings.toggle.endfieldFpsX2" = "fps 2倍补丁";
+"alert.endfieldPatch.fpsX2Hint" = "开启后游戏帧率档位将翻倍 (30/45/60 → 60/90/120),应用成功后需重启游戏生效。";
 "settings.toggle.delayKeymapInitialization" = "延迟初始化按键映射";
 "settings.toggle.fixPlayChainSecKey" = "修复PlayChain未正确处理SecKey的问题";
 "settings.toggle.minecraftEnhanceScrollWheel" = "优化Minecraft鼠标滚轮（试验阶段）";

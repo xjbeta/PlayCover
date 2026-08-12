@@ -224,6 +224,7 @@ struct GraphicsView: View {
     @State var showResolutionWarning = false
     @State var showEndfieldPatchAlert = false
     @State var endfieldPatchResult: String?
+    @State var endfieldFpsX2Enabled = false
     @AppStorage("settings.settings.inverseScreenValues") private var inverseScreenValues = false
     @AppStorage("settings.settings.disableTimeout") private var disableTimeout = false
     @AppStorage("settings.toggle.hideTitleBar") private var hideTitleBar = false
@@ -500,25 +501,36 @@ struct GraphicsView: View {
                 setAspectRatioForResizableWindow()
             }
         }
-        .alert("alert.endfieldPatch.title", isPresented: $showEndfieldPatchAlert) {
-            Button("button.OK") {
-                let result = EndfieldPatch.apply(to: app.url,
-                                                 width: renderWidth,
-                                                 height: renderHeight)
-                switch result {
-                case .success(let res):
-                    endfieldPatchResult = String(
-                        format: NSLocalizedString("alert.endfieldPatch.success", comment: ""), res)
-                case .failure(let error):
-                    endfieldPatchResult = String(
-                        format: NSLocalizedString("alert.endfieldPatch.failure", comment: ""),
-                        error.localizedDescription)
+        .sheet(isPresented: $showEndfieldPatchAlert) {
+            VStack(alignment: .leading, spacing: 12) {
+                Text("alert.endfieldPatch.title")
+                    .font(.headline)
+                Text(String(format: NSLocalizedString("alert.endfieldPatch.message", comment: ""),
+                            renderWidth, renderHeight))
+                    .font(.callout)
+                    .foregroundColor(.secondary)
+                Toggle("settings.toggle.endfieldFpsX2", isOn: $endfieldFpsX2Enabled)
+                    .onAppear {
+                        endfieldFpsX2Enabled = EndfieldFpsPatch.isEnabled(to: app.url) ?? false
+                    }
+                Text("alert.endfieldPatch.fpsX2Hint")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                HStack {
+                    Spacer()
+                    Button("button.Cancel") {
+                        showEndfieldPatchAlert = false
+                    }
+                    .keyboardShortcut(.cancelAction)
+                    Button("button.OK") {
+                        showEndfieldPatchAlert = false
+                        applyEndfieldPatch()
+                    }
+                    .keyboardShortcut(.defaultAction)
                 }
             }
-            Button("button.Cancel", role: .cancel) {}
-        } message: {
-            Text(String(format: NSLocalizedString("alert.endfieldPatch.message", comment: ""),
-                        renderWidth, renderHeight))
+            .padding(20)
+            .frame(width: 380)
         }
         .alert("alert.endfieldPatch.result",
                isPresented: Binding(get: { endfieldPatchResult != nil },
@@ -527,6 +539,35 @@ struct GraphicsView: View {
         } message: {
             Text(endfieldPatchResult ?? "")
         }
+    }
+
+    func applyEndfieldPatch() {
+        let outcome = EndfieldPatchManager.apply(to: app.url,
+                                                 width: renderWidth,
+                                                 height: renderHeight,
+                                                 enableFpsX2: endfieldFpsX2Enabled)
+        var messages: [String] = []
+        switch outcome.resolution {
+        case .success(let res):
+            messages.append(res)
+        case .failure(let error):
+            messages.append(String(format: NSLocalizedString("alert.endfieldPatch.failure", comment: ""),
+                                   error.localizedDescription))
+        }
+        switch outcome.fpsX2 {
+            case .success(let res):
+                messages.append(res)
+            case .failure(let error):
+                messages.append(String(format: NSLocalizedString("alert.endfieldPatch.failure", comment: ""),
+                                       error.localizedDescription))
+            }
+
+        if case .failure(let error) = outcome.signing {
+            messages.append(String(format: NSLocalizedString("alert.endfieldPatch.failure", comment: ""),
+                                   error.localizedDescription))
+        }
+
+        endfieldPatchResult = messages.joined(separator: "\n")
     }
 
     func setResolution() {

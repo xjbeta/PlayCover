@@ -108,6 +108,8 @@
 "alert.endfieldPatch.result" = "Patch Result";
 "alert.endfieldPatch.success" = "Patch applied successfully: %@";
 "alert.endfieldPatch.failure" = "Patch failed: %@";
+"settings.toggle.endfieldFpsX2" = "FPS x2 Patch";
+"alert.endfieldPatch.fpsX2Hint" = "Doubles the in-game FPS tiers when enabled (30/45/60 → 60/90/120). Restart the game after applying.";
 "settings.toggle.delayKeymapInitialization" = "Delay Keymap Initialization";
 "settings.toggle.fixPlayChainSecKey" = "Fix PlayChain SecKey issue";
 "settings.toggle.minecraftEnhanceScrollWheel" = "Enhance Minecraft Scroll Wheel (Experimental)";
