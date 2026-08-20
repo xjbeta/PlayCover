@@ -516,6 +516,9 @@ struct GraphicsView: View {
                 Text("alert.endfieldPatch.fpsX2Hint")
                     .font(.caption)
                     .foregroundColor(.secondary)
+                Text("alert.endfieldPatch.bottomHint")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
                 HStack {
                     Spacer()
                     Button("button.Cancel") {
