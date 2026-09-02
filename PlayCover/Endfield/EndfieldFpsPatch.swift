@@ -6,24 +6,25 @@
 import Foundation
 
 /// Endfield 帧率 ×2 补丁 (仅字节写入,幂等):
-///   __ForceSetFrameRate 的帧率副本 x20 取自 x0 (入口 +0x18):
-///   将 `mov x20, x0` 替换为 `add x20, x0, x0`,
+///   1.5.3 的 Application::set_targetFrameRate icall 跳板 (0xcec95c0):
+///     fps 整数值在 x0 → `mov x19,x0` (0xcec95cc) → 尾部 `mov x0,x19` + `br x1` 调到实现。
+///   将 `mov x19,x0` 替换为 `add x19,x0,x0` (0x8B000013), 帧率翻倍。
 ///   官方档位 30/45/60 传入后变为 60/90/120。
-///   注意: 入口 +0x14 的 `mov x19, x1` (0xAA0103F3) 是标志位透传 (运行时实测 x1=2),
-///   不是帧率,切勿误改。帧率流向 x0 → x20 → 尾部 `mov x1, x20` → setter。
+///   ⚠️ 经 LLDB 运行时验证: 翻倍此 icall 的 fps 同时解锁引擎内部限制器与 CADisplayLink,
+///      Metal HUD 实际达到 90/120。仅 hook CADisplayLink 无效 (引擎内部另有限制器)。
 /// 经 EndfieldPatchManager.apply 调用时,二进制已被 .bak 恢复为原版,
 /// 只存在单向写入;enable 门控在 Manager — 关闭时 Manager 不调用本方法,
 /// 撤销由 .bak 恢复承担,补丁本身不写回原字节。
 /// 游戏更新后偏移漂移时,字节校验失败会明确报错,不会误写。
 struct EndfieldFpsPatch {
-    /// __ForceSetFrameRate 函数入口 (llvm 反汇编 .bak 原版确认, file offset)
-    private static let forceSetFrameRateOffset: UInt64 = 0xcf1766c
-    /// 入口 +0x18 (mov x20, x0) 的文件偏移
-    private static let patchOffset: UInt64 = forceSetFrameRateOffset + 0x18
-    /// 原指令: mov x20, x0 (0xAA0003F4)
-    private static let originalBytes = Data([0xf4, 0x03, 0x00, 0xaa])
-    /// 新指令: add x20, x0, x0 (0x8B000014) — x20 = 2 × x0
-    private static let doubledBytes = Data([0x14, 0x00, 0x00, 0x8b])
+    /// Application::set_targetFrameRate icall 跳板入口 (1.5.3 重定位, file offset)
+    private static let forceSetFrameRateOffset: UInt64 = 0xcec95c0
+    /// 入口 +0xc (mov x19, x0) 的偏移 — fps 值装入 x19 的位置
+    private static let patchOffset: UInt64 = forceSetFrameRateOffset + 0xc
+    /// 原指令: mov x19, x0 (0xAA0003F3)
+    private static let originalBytes = Data([0xf3, 0x03, 0x00, 0xaa])
+    /// 新指令: add x19, x0, x0 (0x8B000013) — x19 = 2 × x0
+    private static let doubledBytes = Data([0x13, 0x00, 0x00, 0x8b])
 
     /// 当前二进制是否已应用 ×2 补丁 (nil = 无法判断,可能已随游戏更新漂移)
     static func isEnabled(to appUrl: URL) -> Bool? {
