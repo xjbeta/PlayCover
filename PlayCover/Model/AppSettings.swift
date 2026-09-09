@@ -189,7 +189,8 @@ struct ExtraAppSettingsData: Codable {
     var fixPlayChainSecKey = false
     var minecraftEnhanceScrollWheel = false
     var skipAppleSignInStateCheck = false
-    var fixPlayChainCreateKey = false    var createMetalCacheSymlink = false
+    var fixPlayChainCreateKey = false
+    var createMetalCacheSymlink = false
     var lordOfMysteriesLandscapeWebview = false
     var forcedRefreshRate: Int = 0
     init() {}
@@ -268,7 +269,8 @@ struct ExtraAppSettingsData: Codable {
         fixPlayChainCreateKey = try container.decodeIfPresent(Bool.self, forKey: .fixPlayChainCreateKey) ?? false
         createMetalCacheSymlink = try container.decodeIfPresent(Bool.self, forKey: .createMetalCacheSymlink) ?? false
         lordOfMysteriesLandscapeWebview = try container.decodeIfPresent(Bool.self, forKey: .lordOfMysteriesLandscapeWebview) ?? false
-        forcedRefreshRate = try container.decodeIfPresent(Int.self, forKey: .forcedRefreshRate) ?? 0    }
+        forcedRefreshRate = try container.decodeIfPresent(Int.self, forKey: .forcedRefreshRate) ?? 0
+    }
 
     mutating func applyOverrides(_ overrides: [String: Any]) {
         guard !overrides.isEmpty else { return }
