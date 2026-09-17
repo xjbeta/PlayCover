@@ -225,6 +225,9 @@ struct GraphicsView: View {
     @State var showEndfieldPatchAlert = false
     @State var endfieldPatchResult: String?
     @State var endfieldFpsX2Enabled = false
+    @State var showEndfieldShaderCacheAlert = false
+    @State var endfieldShaderCacheStatus: String?
+    @State var endfieldShaderCacheResult: String?
     @AppStorage("settings.settings.inverseScreenValues") private var inverseScreenValues = false
     @AppStorage("settings.settings.disableTimeout") private var disableTimeout = false
     @AppStorage("settings.toggle.hideTitleBar") private var hideTitleBar = false
@@ -312,6 +315,15 @@ struct GraphicsView: View {
                         Spacer()
                         Button("settings.button.endfieldApplyPatch") {
                             showEndfieldPatchAlert = true
+                        }
+                        .padding(.leading, 8)
+                        .frame(width: 250, alignment: .leading)
+                    }
+                    HStack {
+                        Spacer()
+                        Button("settings.button.endfieldShaderCache") {
+                            endfieldShaderCacheStatus = EndfieldShaderCache.value(in: app)
+                            showEndfieldShaderCacheAlert = true
                         }
                         .padding(.leading, 8)
                         .frame(width: 250, alignment: .leading)
@@ -542,6 +554,43 @@ struct GraphicsView: View {
         } message: {
             Text(endfieldPatchResult ?? "")
         }
+        .sheet(isPresented: $showEndfieldShaderCacheAlert) {
+            VStack(alignment: .leading, spacing: 12) {
+                Text("alert.endfieldShaderCache.title")
+                    .font(.headline)
+                Text("alert.endfieldShaderCache.message")
+                    .font(.callout)
+                    .foregroundColor(.secondary)
+                Text(String(format: NSLocalizedString("alert.endfieldShaderCache.status", comment: ""),
+                            endfieldShaderCacheStatus
+                                ?? NSLocalizedString("alert.endfieldShaderCache.status.absent", comment: "")))
+                    .font(.caption)
+                Text("alert.endfieldShaderCache.hint")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                HStack {
+                    Spacer()
+                    Button("button.Cancel") {
+                        showEndfieldShaderCacheAlert = false
+                    }
+                    .keyboardShortcut(.cancelAction)
+                    Button("button.Clear") {
+                        showEndfieldShaderCacheAlert = false
+                        clearEndfieldShaderCache()
+                    }
+                    .keyboardShortcut(.defaultAction)
+                }
+            }
+            .padding(20)
+            .frame(width: 380)
+        }
+        .alert("alert.endfieldShaderCache.result",
+               isPresented: Binding(get: { endfieldShaderCacheResult != nil },
+                                    set: { if !$0 { endfieldShaderCacheResult = nil } })) {
+            Button("button.OK") {}
+        } message: {
+            Text(endfieldShaderCacheResult ?? "")
+        }
     }
 
     func applyEndfieldPatch() {
@@ -571,6 +620,25 @@ struct GraphicsView: View {
         }
 
         endfieldPatchResult = messages.joined(separator: "\n")
+    }
+
+    /// 删除 `hg_warm_up_once`,使游戏下次启动重新执行「编译着色器缓存」。
+    func clearEndfieldShaderCache() {
+        if EndfieldShaderCache.isGameRunning(app) {
+            endfieldShaderCacheResult = NSLocalizedString("alert.endfieldShaderCache.gameRunning", comment: "")
+            return
+        }
+        switch EndfieldShaderCache.clear(in: app) {
+        case .success(let removed):
+            endfieldShaderCacheResult = removed
+                ? String(format: NSLocalizedString("alert.endfieldShaderCache.success", comment: ""),
+                         EndfieldShaderCache.gateKey)
+                : NSLocalizedString("alert.endfieldShaderCache.absent", comment: "")
+        case .failure(let error):
+            endfieldShaderCacheResult = String(
+                format: NSLocalizedString("alert.endfieldShaderCache.failure", comment: ""),
+                error.localizedDescription)
+        }
     }
 
     func setResolution() {
