@@ -129,6 +129,7 @@
 "settings.endfield.gamepadMapKeyHint" = "修复手柄下地图键失效;键鼠模式切换由另一条链负责。";
 "settings.endfield.resolutionPatch" = "分辨率&高刷新率补丁";
 "settings.endfield.resolutionPatchHint" = "把 UnityFramework 渲染分辨率锁定为下方窗口分辨率,可选帧率档位翻倍。";
+"settings.endfield.patchVersionUnsupported" = "当前游戏版本 %@ 不支持该补丁(仅支持 %@)。";
 "settings.endfield.shaderCache" = "着色器缓存";
 "settings.endfield.shaderCacheHint" = "删除预热标记,让游戏下次启动重新编译着色器缓存。";
 "settings.endfield.mouseDeltaScale" = "鼠标视角倍率: %.2f";

@@ -129,6 +129,7 @@
 "settings.endfield.gamepadMapKeyHint" = "Restores the map key on a controller. Keyboard/mouse switching is handled separately.";
 "settings.endfield.resolutionPatch" = "Resolution & High Refresh Rate Patch";
 "settings.endfield.resolutionPatchHint" = "Locks the UnityFramework render resolution to the window resolution below, optionally doubling the FPS tiers.";
+"settings.endfield.patchVersionUnsupported" = "This patch does not support game version %@ (supported: %@).";
 "settings.endfield.shaderCache" = "Shader Cache";
 "settings.endfield.shaderCacheHint" = "Removes the warm-up marker so the game recompiles shaders on next launch.";
 "settings.endfield.mouseDeltaScale" = "Mouse look scale: %.2f";

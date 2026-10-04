@@ -9,6 +9,13 @@ import Foundation
 ///   并编排分辨率补丁与 FPS ×2 补丁的联合应用与最终统一签名。
 /// 两个补丁只做字节写入,字节级逻辑保留在各自文件 (EndfieldResolutionPatch / EndfieldFpsPatch)。
 enum EndfieldPatchManager {
+    /// 字节级补丁是**版本锁定**的:只对编它时的**那一个**游戏版本有效。
+    static let supportedGameVersion = "1.5.3"
+
+    static func isSupported(gameVersion: String) -> Bool {
+        gameVersion == supportedGameVersion
+    }
+
     /// 两个补丁共用的 UnityFramework 二进制路径
     static func unityFrameworkURL(to appUrl: URL) -> URL {
         appUrl.appendingPathComponent("Frameworks")
@@ -66,7 +73,16 @@ enum EndfieldPatchManager {
     /// FPS ×2 关闭 (enableFpsX2=false) 时不调用 FPS 补丁,直接返回 OFF。
     /// 恢复失败时跳过两个补丁:二进制可能处于缺失/半恢复等未知状态,不应写入。
     @discardableResult
-    static func apply(to appUrl: URL, width: Int, height: Int, enableFpsX2: Bool) -> Outcome {
+    static func apply(to appUrl: URL, width: Int, height: Int, enableFpsX2: Bool,
+                      gameVersion: String) -> Outcome {
+        guard isSupported(gameVersion: gameVersion) else {
+            let error = NSError(domain: "EndfieldPatchManager", code: 1, userInfo: [
+                NSLocalizedDescriptionKey:
+                    "Unsupported game version \(gameVersion); supported: \(supportedGameVersion)"
+            ])
+            return Outcome(resolution: .failure(error), fpsX2: .failure(error),
+                           signing: .success(()))
+        }
         let resolution: Result<String, Error>
         let fpsX2: Result<String, Error>
         switch restoreFromBackup(to: appUrl) {

@@ -43,6 +43,11 @@ struct EndfieldView: View {
             .contains { $0.lastPathComponent == "libUnityDesktopMode.dylib" }
     }
 
+    /// Byte-level patches are version-locked: only the versions they were built for.
+    private var patchVersionSupported: Bool {
+        EndfieldPatchManager.isSupported(gameVersion: app.info.bundleVersion)
+    }
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
@@ -59,10 +64,18 @@ struct EndfieldView: View {
                     Button("settings.button.endfieldApplyPatch") {
                         showResolutionPatchAlert = true
                     }
+                    .disabled(!patchVersionSupported)
                 }
                 Text("settings.endfield.resolutionPatchHint")
                     .font(.caption)
                     .foregroundColor(.secondary)
+                if !patchVersionSupported {
+                    Text(String(format: NSLocalizedString("settings.endfield.patchVersionUnsupported", comment: ""),
+                                app.info.bundleVersion,
+                                EndfieldPatchManager.supportedGameVersion))
+                        .font(.caption)
+                        .foregroundColor(.orange)
+                }
 
                 Divider()
 
@@ -232,7 +245,8 @@ struct EndfieldView: View {
         let outcome = EndfieldPatchManager.apply(to: app.url,
                                                  width: renderWidth,
                                                  height: renderHeight,
-                                                 enableFpsX2: fpsX2Enabled)
+                                                 enableFpsX2: fpsX2Enabled,
+                                                 gameVersion: app.info.bundleVersion)
         var messages: [String] = []
         switch outcome.resolution {
         case .success(let res):
