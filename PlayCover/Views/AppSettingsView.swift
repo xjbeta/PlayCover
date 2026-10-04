@@ -31,6 +31,16 @@ struct AppSettingsView: View {
     @State private var currentTask = BlockingTask.none
     @State private var cache = DataCache.instance
 
+    private var isEndfield: Bool {
+        viewModel.app.info.bundleIdentifier == "com.hypergryph.endfield"
+    }
+
+    /// Tabs after Graphics shift by one when the Endfield tab is present, so the tags stay
+    /// contiguous and the chevron navigation keeps working.
+    private var endfieldTabOffset: Int {
+        isEndfield ? 1 : 0
+    }
+
     var body: some View {
         VStack {
             HStack {
@@ -90,6 +100,13 @@ struct AppSettingsView: View {
                     }
                     .tag(1)
                     .disabled(!(hasPlayTools ?? true))
+                if isEndfield {
+                    EndfieldView(settings: $viewModel.settings, app: viewModel.app)
+                        .tabItem {
+                            Text("settings.tab.endfield")
+                        }
+                        .tag(2)
+                }
                 BypassesView(settings: $viewModel.settings,
                              hasPlayTools: $hasPlayTools,
                              task: $currentTask,
@@ -97,7 +114,7 @@ struct AppSettingsView: View {
                     .tabItem {
                         Text("settings.tab.bypasses")
                     }
-                    .tag(2)
+                    .tag(2 + endfieldTabOffset)
                     .disabled(!(hasPlayTools ?? true))
                 MiscView(settings: $viewModel.settings,
                          closeView: $closeView,
@@ -109,19 +126,19 @@ struct AppSettingsView: View {
                     .tabItem {
                         Text("settings.tab.misc")
                     }
-                    .tag(3)
+                    .tag(3 + endfieldTabOffset)
                 ExtrasView(settings: $viewModel.settings.extraSettings,
                            app: viewModel.app)
                    .tabItem {
                        Text("settings.tab.extras")
                    }
-                   .tag(4)
+                   .tag(4 + endfieldTabOffset)
                    .disabled(!(hasPlayTools ?? true))
                 InfoView(info: viewModel.app.info, hasPlayTools: (hasPlayTools ?? true))
                     .tabItem {
                         Text("settings.tab.info")
                     }
-                    .tag(5)
+                    .tag(5 + endfieldTabOffset)
             }
             .frame(minWidth: 500, minHeight: 250)
             HStack {
@@ -133,11 +150,11 @@ struct AppSettingsView: View {
                     }
                     .disabled(selectedTab == 0)
                     Button {
-                        selectedTab = min(selectedTab + 1, 5)
+                        selectedTab = min(selectedTab + 1, 5 + endfieldTabOffset)
                     } label: {
                         Image(systemName: "chevron.right")
                     }
-                    .disabled(selectedTab == 5)
+                    .disabled(selectedTab == 5 + endfieldTabOffset)
                 }
                 Spacer()
                 Button("settings.resetSettings") {
@@ -222,29 +239,11 @@ struct GraphicsView: View {
     @State var customWidth = 1920
     @State var customHeight = 1080
     @State var showResolutionWarning = false
-    @State var showEndfieldPatchAlert = false
-    @State var endfieldPatchResult: String?
-    @State var endfieldFpsX2Enabled = false
-    @State var showEndfieldShaderCacheAlert = false
-    @State var endfieldShaderCacheStatus: String?
-    @State var endfieldShaderCacheResult: String?
     @AppStorage("settings.settings.inverseScreenValues") private var inverseScreenValues = false
     @AppStorage("settings.settings.disableTimeout") private var disableTimeout = false
     @AppStorage("settings.toggle.hideTitleBar") private var hideTitleBar = false
     @AppStorage("settings.toggle.floatingWindow") private var floatingWindow = false
     @AppStorage("settings.settings.displayRotation") private var displayRotation = 0
-
-    private var isEndfield: Bool {
-        app.info.bundleIdentifier == "com.hypergryph.endfield"
-    }
-
-    /// 渲染分辨率 = 窗口分辨率 × customScaler
-    private var renderWidth: Int {
-        Int(Double(settings.settings.windowWidth) * customScaler)
-    }
-    private var renderHeight: Int {
-        Int(Double(settings.settings.windowHeight) * customScaler)
-    }
 
     static var number: NumberFormatter {
         let formatter = NumberFormatter()
@@ -309,25 +308,6 @@ struct GraphicsView: View {
                     }
                     .frame(width: 250, alignment: .leading)
                     .help("settings.picker.adaptiveRes.help")
-                }
-                if isEndfield {
-                    HStack {
-                        Spacer()
-                        Button("settings.button.endfieldApplyPatch") {
-                            showEndfieldPatchAlert = true
-                        }
-                        .padding(.leading, 8)
-                        .frame(width: 250, alignment: .leading)
-                    }
-                    HStack {
-                        Spacer()
-                        Button("settings.button.endfieldShaderCache") {
-                            endfieldShaderCacheStatus = EndfieldShaderCache.value(in: app)
-                            showEndfieldShaderCacheAlert = true
-                        }
-                        .padding(.leading, 8)
-                        .frame(width: 250, alignment: .leading)
-                    }
                 }
                 HStack {
                     Text("settings.picker.forcedRefreshRate")
@@ -512,132 +492,6 @@ struct GraphicsView: View {
             .onChange(of: settings.settings.resizableAspectRatioType) { _ in
                 setAspectRatioForResizableWindow()
             }
-        }
-        .sheet(isPresented: $showEndfieldPatchAlert) {
-            VStack(alignment: .leading, spacing: 12) {
-                Text("alert.endfieldPatch.title")
-                    .font(.headline)
-                Text(String(format: NSLocalizedString("alert.endfieldPatch.message", comment: ""),
-                            renderWidth, renderHeight))
-                    .font(.callout)
-                    .foregroundColor(.secondary)
-                Toggle("settings.toggle.endfieldFpsX2", isOn: $endfieldFpsX2Enabled)
-                    .onAppear {
-                        endfieldFpsX2Enabled = EndfieldFpsPatch.isEnabled(to: app.url) ?? false
-                    }
-                Text("alert.endfieldPatch.fpsX2Hint")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                Text("alert.endfieldPatch.bottomHint")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                HStack {
-                    Spacer()
-                    Button("button.Cancel") {
-                        showEndfieldPatchAlert = false
-                    }
-                    .keyboardShortcut(.cancelAction)
-                    Button("button.OK") {
-                        showEndfieldPatchAlert = false
-                        applyEndfieldPatch()
-                    }
-                    .keyboardShortcut(.defaultAction)
-                }
-            }
-            .padding(20)
-            .frame(width: 380)
-        }
-        .alert("alert.endfieldPatch.result",
-               isPresented: Binding(get: { endfieldPatchResult != nil },
-                                    set: { if !$0 { endfieldPatchResult = nil } })) {
-            Button("button.OK") {}
-        } message: {
-            Text(endfieldPatchResult ?? "")
-        }
-        .sheet(isPresented: $showEndfieldShaderCacheAlert) {
-            VStack(alignment: .leading, spacing: 12) {
-                Text("alert.endfieldShaderCache.title")
-                    .font(.headline)
-                Text("alert.endfieldShaderCache.message")
-                    .font(.callout)
-                    .foregroundColor(.secondary)
-                Text(String(format: NSLocalizedString("alert.endfieldShaderCache.status", comment: ""),
-                            endfieldShaderCacheStatus
-                                ?? NSLocalizedString("alert.endfieldShaderCache.status.absent", comment: "")))
-                    .font(.caption)
-                Text("alert.endfieldShaderCache.hint")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                HStack {
-                    Spacer()
-                    Button("button.Cancel") {
-                        showEndfieldShaderCacheAlert = false
-                    }
-                    .keyboardShortcut(.cancelAction)
-                    Button("button.Clear") {
-                        showEndfieldShaderCacheAlert = false
-                        clearEndfieldShaderCache()
-                    }
-                    .keyboardShortcut(.defaultAction)
-                }
-            }
-            .padding(20)
-            .frame(width: 380)
-        }
-        .alert("alert.endfieldShaderCache.result",
-               isPresented: Binding(get: { endfieldShaderCacheResult != nil },
-                                    set: { if !$0 { endfieldShaderCacheResult = nil } })) {
-            Button("button.OK") {}
-        } message: {
-            Text(endfieldShaderCacheResult ?? "")
-        }
-    }
-
-    func applyEndfieldPatch() {
-        let outcome = EndfieldPatchManager.apply(to: app.url,
-                                                 width: renderWidth,
-                                                 height: renderHeight,
-                                                 enableFpsX2: endfieldFpsX2Enabled)
-        var messages: [String] = []
-        switch outcome.resolution {
-        case .success(let res):
-            messages.append(res)
-        case .failure(let error):
-            messages.append(String(format: NSLocalizedString("alert.endfieldPatch.failure", comment: ""),
-                                   error.localizedDescription))
-        }
-        switch outcome.fpsX2 {
-            case .success(let res):
-                messages.append(res)
-            case .failure(let error):
-                messages.append(String(format: NSLocalizedString("alert.endfieldPatch.failure", comment: ""),
-                                       error.localizedDescription))
-            }
-
-        if case .failure(let error) = outcome.signing {
-            messages.append(String(format: NSLocalizedString("alert.endfieldPatch.failure", comment: ""),
-                                   error.localizedDescription))
-        }
-
-        endfieldPatchResult = messages.joined(separator: "\n")
-    }
-
-    /// 删除 `hg_warm_up_once`,使游戏下次启动重新执行「编译着色器缓存」。
-    func clearEndfieldShaderCache() {
-        if EndfieldShaderCache.isGameRunning(app) {
-            endfieldShaderCacheResult = NSLocalizedString("alert.endfieldShaderCache.gameRunning", comment: "")
-            return
-        }
-        switch EndfieldShaderCache.clear(in: app) {
-        case .success(let removed):
-            endfieldShaderCacheResult = removed
-                ? String(format: NSLocalizedString("alert.endfieldShaderCache.success", comment: ""),
-                         EndfieldShaderCache.gateKey)
-                : NSLocalizedString("alert.endfieldShaderCache.absent", comment: "")
-        case .failure(let error):
-            endfieldShaderCacheResult = String(
-                format: NSLocalizedString("alert.endfieldShaderCache.failure", comment: ""),
-                error.localizedDescription)
         }
     }
 

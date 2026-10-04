@@ -11,6 +11,7 @@
 		01AFD00F302CBA2C00853AA8 /* EndfieldFpsPatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AFD00E302CBA2C00853AA8 /* EndfieldFpsPatch.swift */; };
 		01AFD012302CC3B600853AA8 /* EndfieldPatchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AFD011302CC3B600853AA8 /* EndfieldPatchManager.swift */; };
 		01AFD021302CE00000853AA8 /* EndfieldShaderCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AFD020302CE00000853AA8 /* EndfieldShaderCache.swift */; };
+		01FDCDAC3072C79000F76B2D /* EndfieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FDCDAB3072C79000F76B2D /* EndfieldView.swift */; };
 		342787552E787EBB003A3C2F /* Keymapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342787542E787EB9003A3C2F /* Keymapping.swift */; };
 		3447B5E52E28B46800FAA22F /* KeymapViewVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3447B5E42E28B46800FAA22F /* KeymapViewVM.swift */; };
 		34775E752D493B59001586C2 /* CachedAsyncImageWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34775E742D493B54001586C2 /* CachedAsyncImageWrapper.swift */; };
@@ -111,6 +112,7 @@
 		01AFD00E302CBA2C00853AA8 /* EndfieldFpsPatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndfieldFpsPatch.swift; sourceTree = "<group>"; };
 		01AFD011302CC3B600853AA8 /* EndfieldPatchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndfieldPatchManager.swift; sourceTree = "<group>"; };
 		01AFD020302CE00000853AA8 /* EndfieldShaderCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndfieldShaderCache.swift; sourceTree = "<group>"; };
+		01FDCDAB3072C79000F76B2D /* EndfieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndfieldView.swift; sourceTree = "<group>"; };
 		342787542E787EB9003A3C2F /* Keymapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keymapping.swift; sourceTree = "<group>"; };
 		3447B5E42E28B46800FAA22F /* KeymapViewVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeymapViewVM.swift; sourceTree = "<group>"; };
 		34775E742D493B54001586C2 /* CachedAsyncImageWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedAsyncImageWrapper.swift; sourceTree = "<group>"; };
@@ -289,6 +291,7 @@
 				B6603E1228E2257800DEFA3F /* Uninstaller.swift */,
 				ABDAD80529893CF900DC164F /* KeyCoverSetupViews.swift */,
 				ABDAD80B298A1E3E00DC164F /* KeyCoverViews.swift */,
+				01FDCDAB3072C79000F76B2D /* EndfieldView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -749,6 +752,7 @@
 				B6AB53C929232B4F00039B2E /* KeyCodeNames.swift in Sources */,
 				92EE06D4274EA604002C907B /* PlayAppView.swift in Sources */,
 				B67C1A112AE8091F00F396CC /* StoreInfoAppView.swift in Sources */,
+				01FDCDAC3072C79000F76B2D /* EndfieldView.swift in Sources */,
 				B17FD04728C7B0D900B1D4CA /* AssetsExtractor.swift in Sources */,
 				ABDAD80629893CF900DC164F /* KeyCoverSetupViews.swift in Sources */,
 				6888981729F9158700105D9C /* IPASourceView.swift in Sources */,

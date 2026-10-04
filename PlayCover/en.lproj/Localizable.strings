@@ -102,7 +102,7 @@
 "settings.toggle.hideiOSAppOnMac" = "Hide iOSAppOnMac";
 "settings.toggle.weLinkCloudGameForceTouchMode" = "Force Touch Mode for WeLink Cloud Games";
 "settings.toggle.wuwaCloudGameFixMouseIssue" = "Fix Wuwa Cloud Game Mouse issue";
-"settings.button.endfieldApplyPatch" = "Endfield Resolution Patch";
+"settings.button.endfieldApplyPatch" = "Endfield Resolution & High Refresh Rate Patch";
 "alert.endfieldPatch.title" = "Apply Resolution Patch";
 "alert.endfieldPatch.message" = "Patches UnityFramework to lock render resolution to %dx%d and force FSR3 to Native mode.";
 "alert.endfieldPatch.result" = "Patch Result";
@@ -122,6 +122,12 @@
 "alert.endfieldShaderCache.absent" = "Marker not set, nothing to clear.";
 "alert.endfieldShaderCache.failure" = "Failed: %@";
 "alert.endfieldShaderCache.gameRunning" = "The game is still running. Fully quit it first, otherwise the marker is written back on exit.";
+"settings.tab.endfield" = "Endfield";
+"settings.endfield.riskWarning" = "Warning: everything on this page modifies the game and may be detected by anti-cheat - your account could be banned. Use at your own risk.\nIf you do get banned, don't worry - the developer is banned with you. 🤓";
+"settings.endfield.resolutionPatch" = "Resolution & High Refresh Rate Patch";
+"settings.endfield.resolutionPatchHint" = "Locks the UnityFramework render resolution to the window resolution below, optionally doubling the FPS tiers.";
+"settings.endfield.shaderCache" = "Shader Cache";
+"settings.endfield.shaderCacheHint" = "Removes the warm-up marker so the game recompiles shaders on next launch.";
 "button.Clear" = "Clear";
 "settings.toggle.delayKeymapInitialization" = "Delay Keymap Initialization";
 "settings.toggle.fixPlayChainSecKey" = "Fix PlayChain SecKey issue";
