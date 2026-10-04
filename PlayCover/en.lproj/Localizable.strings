@@ -102,8 +102,9 @@
 "settings.toggle.hideiOSAppOnMac" = "Hide iOSAppOnMac";
 "settings.toggle.weLinkCloudGameForceTouchMode" = "Force Touch Mode for WeLink Cloud Games";
 "settings.toggle.wuwaCloudGameFixMouseIssue" = "Fix Wuwa Cloud Game Mouse issue";
-"settings.button.endfieldApplyPatch" = "Endfield Resolution & High Refresh Rate Patch";
-"alert.endfieldPatch.title" = "Apply Resolution Patch";
+"settings.button.endfieldApplyPatch" = "UnityFramework Patch";
+"alert.endfieldPatch.title" = "UnityFramework Patch";
+"settings.endfield.revealInFinder" = "Reveal in Finder";
 "alert.endfieldPatch.message" = "Patches UnityFramework to lock render resolution to %dx%d and force FSR3 to Native mode.";
 "alert.endfieldPatch.result" = "Patch Result";
 "alert.endfieldPatch.success" = "Patch applied successfully: %@";
@@ -111,7 +112,7 @@
 "settings.toggle.endfieldFpsX2" = "FPS x2 Patch";
 "alert.endfieldPatch.fpsX2Hint" = "Doubles the in-game FPS tiers when enabled (30/45/60 → 60/90/120).";
 "alert.endfieldPatch.bottomHint" = "The original binary will be backed up to .bak. Restart the game after the patch is applied. Proceed?";
-"settings.button.endfieldShaderCache" = "Endfield Shader Cache";
+"settings.button.endfieldShaderCache" = "Clear Shader Cache";
 "alert.endfieldShaderCache.title" = "Clear Shader Cache";
 "alert.endfieldShaderCache.message" = "Removes the shader warm-up marker so the game re-runs 'Compiling Shader Cache' on next launch. Use this after a macOS update, when shaders must be recompiled and cause stutter.";
 "alert.endfieldShaderCache.status" = "Current marker: %@";

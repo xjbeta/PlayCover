@@ -52,7 +52,7 @@ struct EndfieldView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
                 Text("settings.endfield.riskWarning")
-                    .font(.callout)
+                    .font(.body)
                     .foregroundColor(.orange)
                     .fixedSize(horizontal: false, vertical: true)
 
@@ -178,6 +178,11 @@ struct EndfieldView: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
                 HStack {
+                    Button("settings.endfield.revealInFinder") {
+                        // The patched binary itself: UnityFramework.framework/UnityFramework.
+                        let binary = EndfieldPatchManager.unityFrameworkURL(to: app.url)
+                        NSWorkspace.shared.activateFileViewerSelecting([binary])
+                    }
                     Spacer()
                     Button("button.Cancel") {
                         showResolutionPatchAlert = false

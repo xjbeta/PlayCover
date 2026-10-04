@@ -102,8 +102,9 @@
 "settings.toggle.hideiOSAppOnMac" = "屏蔽iOSAppOnMac";
 "settings.toggle.weLinkCloudGameForceTouchMode" = "强制WeLink云游戏启用触屏模式";
 "settings.toggle.wuwaCloudGameFixMouseIssue" = "修复云鸣潮鼠标适配问题";
-"settings.button.endfieldApplyPatch" = "终末地分辨率&高刷新率补丁";
-"alert.endfieldPatch.title" = "应用分辨率补丁";
+"settings.button.endfieldApplyPatch" = "UnityFramework 补丁";
+"alert.endfieldPatch.title" = "UnityFramework 补丁";
+"settings.endfield.revealInFinder" = "在 Finder 中显示";
 "alert.endfieldPatch.message" = "将修改 UnityFramework 以锁定渲染分辨率为 %dx%d 并强制 FSR3 为 Native 模式,";
 "alert.endfieldPatch.result" = "补丁结果";
 "alert.endfieldPatch.success" = "补丁应用成功: %@";
@@ -111,7 +112,7 @@
 "settings.toggle.endfieldFpsX2" = "fps 2倍补丁";
 "alert.endfieldPatch.fpsX2Hint" = "开启后游戏帧率档位将翻倍 (30/45/60 → 60/90/120),";
 "alert.endfieldPatch.bottomHint" = "原版二进制将备份到 .bak。补丁应用成功后需重启游戏生效。是否继续?";
-"settings.button.endfieldShaderCache" = "终末地着色器缓存";
+"settings.button.endfieldShaderCache" = "清理着色器缓存";
 "alert.endfieldShaderCache.title" = "清理着色器缓存";
 "alert.endfieldShaderCache.message" = "删除预热标记,让游戏下次启动重新执行「编译着色器缓存」。系统更新后着色缓存失效、出现异常卡顿时使用。";
 "alert.endfieldShaderCache.status" = "当前标记: %@";
