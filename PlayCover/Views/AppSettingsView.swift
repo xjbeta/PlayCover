@@ -1577,6 +1577,13 @@ struct ExtrasView: View {
                         Spacer()
                     }
                 }
+                if overriddenKeys.contains("endfieldGamepadMapKey") {
+                    HStack {
+                        Toggle("settings.toggle.endfieldGamepadMapKey",
+                               isOn: $settings.endfieldGamepadMapKey)
+                        Spacer()
+                    }
+                }
                 Spacer().frame(height: 16)
                 HStack {
                     Button(!showAllOptions ? "settings.button.extras.showAllOptions" :

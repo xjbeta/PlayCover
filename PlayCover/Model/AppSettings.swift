@@ -192,6 +192,9 @@ struct ExtraAppSettingsData: Codable {
     var fixPlayChainCreateKey = false
     var createMetalCacheSymlink = false
     var lordOfMysteriesLandscapeWebview = false
+    var endfieldGamepadMapKey = false
+    var endfieldMouseDeltaScale: Double = 1.0
+    var endfieldPluginFixes = false
     var forcedRefreshRate: Int = 0
     init() {}
 
@@ -269,6 +272,9 @@ struct ExtraAppSettingsData: Codable {
         fixPlayChainCreateKey = try container.decodeIfPresent(Bool.self, forKey: .fixPlayChainCreateKey) ?? false
         createMetalCacheSymlink = try container.decodeIfPresent(Bool.self, forKey: .createMetalCacheSymlink) ?? false
         lordOfMysteriesLandscapeWebview = try container.decodeIfPresent(Bool.self, forKey: .lordOfMysteriesLandscapeWebview) ?? false
+        endfieldGamepadMapKey = try container.decodeIfPresent(Bool.self, forKey: .endfieldGamepadMapKey) ?? false
+        endfieldMouseDeltaScale = try container.decodeIfPresent(Double.self, forKey: .endfieldMouseDeltaScale) ?? 1.0
+        endfieldPluginFixes = try container.decodeIfPresent(Bool.self, forKey: .endfieldPluginFixes) ?? false
         forcedRefreshRate = try container.decodeIfPresent(Int.self, forKey: .forcedRefreshRate) ?? 0
     }
 
@@ -345,6 +351,9 @@ struct ExtraAppSettingsData: Codable {
         if let val = overrides["fixPlayChainCreateKey"] as? Bool { fixPlayChainCreateKey = val }
         if let val = overrides["createMetalCacheSymlink"] as? Bool { createMetalCacheSymlink = val }
         if let val = overrides["lordOfMysteriesLandscapeWebview"] as? Bool { lordOfMysteriesLandscapeWebview = val }
+        if let val = overrides["endfieldGamepadMapKey"] as? Bool { endfieldGamepadMapKey = val }
+        if let val = overrides["endfieldMouseDeltaScale"] as? Double { endfieldMouseDeltaScale = val }
+        if let val = overrides["endfieldPluginFixes"] as? Bool { endfieldPluginFixes = val }
         if let val = overrides["forcedRefreshRate"] as? Int { forcedRefreshRate = val }
     }
 }

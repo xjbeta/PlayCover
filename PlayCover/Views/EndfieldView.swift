@@ -16,6 +16,9 @@ struct EndfieldView: View {
 
     // `AppSettings` is a plain class, so writing `settings.extraSettings.x` through the binding
     // persists but does not invalidate the view. Mirror it locally so the toggle redraws at once.
+    @State private var gamepadMapKey = false
+    @State private var mouseDeltaScale = 1.0
+    @State private var hasPlugin = false
 
     // MARK: - Resolution patch
     @State var showResolutionPatchAlert = false
@@ -33,6 +36,12 @@ struct EndfieldView: View {
     @State var showShaderCacheAlert = false
     @State var shaderCacheStatus: String?
     @State var shaderCacheResult: String?
+
+    /// The plugin-attached fixes only make sense when libUnityDesktopMode is installed.
+    static func pluginInstalled(_ app: PlayApp) -> Bool {
+        PlayTools.userDylibs(bundleIdentifier: app.info.bundleIdentifier)
+            .contains { $0.lastPathComponent == "libUnityDesktopMode.dylib" }
+    }
 
     var body: some View {
         ScrollView {
@@ -69,9 +78,73 @@ struct EndfieldView: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
 
+                Divider()
+
+                Text("settings.endfield.pluginSection")
+                    .bold()
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("settings.endfield.pluginHint")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    Link("settings.endfield.pluginLink",
+                         destination: URL(string: "https://www.bilibili.com/video/BV14xHz65Eiv")!)
+                        .font(.caption)
+                    HStack {
+                        Button("settings.endfield.checkPlugin") {
+                            // The button is the gate: it unlocks the fixes below and records the
+                            // decision, which is what PlayTools reads.
+                            hasPlugin = EndfieldView.pluginInstalled(app)
+                            settings.extraSettings.endfieldPluginFixes = hasPlugin
+                        }
+                        if hasPlugin {
+                            Text("settings.endfield.pluginFound")
+                                .font(.caption)
+                                .foregroundColor(.green)
+                        }
+                    }
+                }
+
+                HStack {
+                    Toggle("settings.toggle.endfieldGamepadMapKey", isOn: $gamepadMapKey)
+                        .help("settings.toggle.endfieldGamepadMapKey.help")
+                        .disabled(!hasPlugin)
+                        .onAppear { gamepadMapKey = settings.extraSettings.endfieldGamepadMapKey }
+                        .onChange(of: gamepadMapKey) { _ in
+                            settings.extraSettings.endfieldGamepadMapKey = gamepadMapKey
+                        }
+                    Spacer()
+                }
+                Text("settings.endfield.gamepadMapKeyHint")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+
+                HStack {
+                    Text(String(format: NSLocalizedString("settings.endfield.mouseDeltaScale", comment: ""),
+                                mouseDeltaScale))
+                        .help("settings.endfield.mouseDeltaScale.help")
+                    Spacer()
+                    Slider(value: $mouseDeltaScale, in: 0...3, step: 0.05, label: { EmptyView() })
+                        .frame(width: 200)
+                        .onAppear { mouseDeltaScale = settings.extraSettings.endfieldMouseDeltaScale }
+                        .onChange(of: mouseDeltaScale) { _ in
+                            settings.extraSettings.endfieldMouseDeltaScale = mouseDeltaScale
+                        }
+                }
+                .disabled(!hasPlugin)
+
+                Text("settings.endfield.mouseDeltaScaleHint")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+
                 Spacer()
             }
             .padding()
+        }
+        .onAppear {
+            // Auto-check once when the settings open; the button re-checks on demand.
+            hasPlugin = EndfieldView.pluginInstalled(app)
+            settings.extraSettings.endfieldPluginFixes = hasPlugin
         }
         .sheet(isPresented: $showResolutionPatchAlert) {
             VStack(alignment: .leading, spacing: 12) {
