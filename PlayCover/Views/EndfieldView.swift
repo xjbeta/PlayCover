@@ -50,12 +50,8 @@ struct EndfieldView: View {
 
                 Divider()
 
-                Text("settings.endfield.runtimeSection")
-                    .bold()
-
                 HStack {
                     Toggle("settings.toggle.endfieldResolutionFix", isOn: $resolutionFix)
-                        .help("settings.toggle.endfieldResolutionFix.help")
                         .onAppear { resolutionFix = settings.extraSettings.endfieldResolutionFix }
                         .onChange(of: resolutionFix) { _ in
                             settings.extraSettings.endfieldResolutionFix = resolutionFix
@@ -68,7 +64,6 @@ struct EndfieldView: View {
 
                 HStack {
                     Toggle("settings.toggle.endfieldFpsFix", isOn: $fpsFix)
-                        .help("settings.toggle.endfieldFpsFix.help")
                         .onAppear { fpsFix = settings.extraSettings.endfieldFpsFix }
                         .onChange(of: fpsFix) { _ in
                             settings.extraSettings.endfieldFpsFix = fpsFix
@@ -81,7 +76,6 @@ struct EndfieldView: View {
 
                 HStack {
                     Toggle("settings.toggle.endfieldHaptics", isOn: $hapticsFix)
-                        .help("settings.toggle.endfieldHaptics.help")
                         .onAppear { hapticsFix = settings.extraSettings.endfieldHaptics }
                         .onChange(of: hapticsFix) { _ in
                             settings.extraSettings.endfieldHaptics = hapticsFix

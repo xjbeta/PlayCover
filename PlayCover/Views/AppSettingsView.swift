@@ -31,8 +31,12 @@ struct AppSettingsView: View {
     @State private var currentTask = BlockingTask.none
     @State private var cache = DataCache.instance
 
+    /// The Endfield tab applies to both builds - CN (`com.hypergryph.endfield`) and
+    /// international (`com.gryphline.endfield.ios`). They share the same metadata, so one
+    /// implementation covers both.
     private var isEndfield: Bool {
-        viewModel.app.info.bundleIdentifier == "com.hypergryph.endfield"
+        ["com.hypergryph.endfield", "com.gryphline.endfield.ios"]
+            .contains(viewModel.app.info.bundleIdentifier)
     }
 
     /// Tabs after Graphics shift by one when the Endfield tab is present, so the tags stay
