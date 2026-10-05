@@ -2,9 +2,13 @@
 //  EndfieldView.swift
 //  PlayCover
 //
-//  The dedicated Endfield tab in the app settings. It owns the three Endfield-only tools -
-//  the gamepad map-key fix, the render-resolution patch, and the shader-cache reset - and
-//  keeps them out of the generic graphics tab.
+//  The dedicated Endfield tab in the app settings. It owns the Endfield-only tools:
+//  the three runtime fixes (resolution, fps x2, haptics), the shader-cache reset, and the
+//  libUnityDesktopMode-gated fixes (gamepad map key, mouse delta). They are kept out of the
+//  generic graphics tab.
+//
+//  The resolution / fps / haptics switches are plain settings flags: PlayTools reads them at
+//  launch and applies the fix in process memory (no on-disk patching, no re-signing).
 //
 
 import SwiftUI
@@ -20,17 +24,10 @@ struct EndfieldView: View {
     @State private var mouseDeltaScale = 1.0
     @State private var hasPlugin = false
 
-    // MARK: - Resolution patch
-    @State var showResolutionPatchAlert = false
-    @State var resolutionPatchResult: String?
-    @State var fpsX2Enabled = false
-    /// Render resolution = window resolution x scaler (the same value the graphics tab shows).
-    private var renderWidth: Int {
-        Int(Double(settings.settings.windowWidth) * settings.settings.customScaler)
-    }
-    private var renderHeight: Int {
-        Int(Double(settings.settings.windowHeight) * settings.settings.customScaler)
-    }
+    // MARK: - Runtime fixes
+    @State private var resolutionFix = false
+    @State private var fpsFix = false
+    @State private var hapticsFix = false
 
     // MARK: - Shader cache
     @State var showShaderCacheAlert = false
@@ -43,11 +40,6 @@ struct EndfieldView: View {
             .contains { $0.lastPathComponent == "libUnityDesktopMode.dylib" }
     }
 
-    /// Byte-level patches are version-locked: only the versions they were built for.
-    private var patchVersionSupported: Bool {
-        EndfieldPatchManager.isSupported(gameVersion: app.info.bundleVersion)
-    }
-
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
@@ -58,24 +50,47 @@ struct EndfieldView: View {
 
                 Divider()
 
+                Text("settings.endfield.runtimeSection")
+                    .bold()
+
                 HStack {
-                    Text("settings.endfield.resolutionPatch")
+                    Toggle("settings.toggle.endfieldResolutionFix", isOn: $resolutionFix)
+                        .help("settings.toggle.endfieldResolutionFix.help")
+                        .onAppear { resolutionFix = settings.extraSettings.endfieldResolutionFix }
+                        .onChange(of: resolutionFix) { _ in
+                            settings.extraSettings.endfieldResolutionFix = resolutionFix
+                        }
                     Spacer()
-                    Button("settings.button.endfieldApplyPatch") {
-                        showResolutionPatchAlert = true
-                    }
-                    .disabled(!patchVersionSupported)
                 }
-                Text("settings.endfield.resolutionPatchHint")
+                Text("settings.endfield.resolutionFixHint")
                     .font(.caption)
                     .foregroundColor(.secondary)
-                if !patchVersionSupported {
-                    Text(String(format: NSLocalizedString("settings.endfield.patchVersionUnsupported", comment: ""),
-                                app.info.bundleVersion,
-                                EndfieldPatchManager.supportedGameVersion))
-                        .font(.caption)
-                        .foregroundColor(.orange)
+
+                HStack {
+                    Toggle("settings.toggle.endfieldFpsFix", isOn: $fpsFix)
+                        .help("settings.toggle.endfieldFpsFix.help")
+                        .onAppear { fpsFix = settings.extraSettings.endfieldFpsFix }
+                        .onChange(of: fpsFix) { _ in
+                            settings.extraSettings.endfieldFpsFix = fpsFix
+                        }
+                    Spacer()
                 }
+                Text("settings.endfield.fpsFixHint")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+
+                HStack {
+                    Toggle("settings.toggle.endfieldHaptics", isOn: $hapticsFix)
+                        .help("settings.toggle.endfieldHaptics.help")
+                        .onAppear { hapticsFix = settings.extraSettings.endfieldHaptics }
+                        .onChange(of: hapticsFix) { _ in
+                            settings.extraSettings.endfieldHaptics = hapticsFix
+                        }
+                    Spacer()
+                }
+                Text("settings.endfield.hapticsHint")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
 
                 Divider()
 
@@ -159,52 +174,6 @@ struct EndfieldView: View {
             hasPlugin = EndfieldView.pluginInstalled(app)
             settings.extraSettings.endfieldPluginFixes = hasPlugin
         }
-        .sheet(isPresented: $showResolutionPatchAlert) {
-            VStack(alignment: .leading, spacing: 12) {
-                Text("alert.endfieldPatch.title")
-                    .font(.headline)
-                Text(String(format: NSLocalizedString("alert.endfieldPatch.message", comment: ""),
-                            renderWidth, renderHeight))
-                    .font(.callout)
-                    .foregroundColor(.secondary)
-                Toggle("settings.toggle.endfieldFpsX2", isOn: $fpsX2Enabled)
-                    .onAppear {
-                        fpsX2Enabled = EndfieldFpsPatch.isEnabled(to: app.url) ?? false
-                    }
-                Text("alert.endfieldPatch.fpsX2Hint")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                Text("alert.endfieldPatch.bottomHint")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                HStack {
-                    Button("settings.endfield.revealInFinder") {
-                        // The patched binary itself: UnityFramework.framework/UnityFramework.
-                        let binary = EndfieldPatchManager.unityFrameworkURL(to: app.url)
-                        NSWorkspace.shared.activateFileViewerSelecting([binary])
-                    }
-                    Spacer()
-                    Button("button.Cancel") {
-                        showResolutionPatchAlert = false
-                    }
-                    .keyboardShortcut(.cancelAction)
-                    Button("button.OK") {
-                        showResolutionPatchAlert = false
-                        applyResolutionPatch()
-                    }
-                    .keyboardShortcut(.defaultAction)
-                }
-            }
-            .padding(20)
-            .frame(width: 380)
-        }
-        .alert("alert.endfieldPatch.result",
-               isPresented: Binding(get: { resolutionPatchResult != nil },
-                                    set: { if !$0 { resolutionPatchResult = nil } })) {
-            Button("button.OK") {}
-        } message: {
-            Text(resolutionPatchResult ?? "")
-        }
         .sheet(isPresented: $showShaderCacheAlert) {
             VStack(alignment: .leading, spacing: 12) {
                 Text("alert.endfieldShaderCache.title")
@@ -242,38 +211,6 @@ struct EndfieldView: View {
         } message: {
             Text(shaderCacheResult ?? "")
         }
-    }
-
-    // MARK: - Resolution patch
-
-    func applyResolutionPatch() {
-        let outcome = EndfieldPatchManager.apply(to: app.url,
-                                                 width: renderWidth,
-                                                 height: renderHeight,
-                                                 enableFpsX2: fpsX2Enabled,
-                                                 gameVersion: app.info.bundleVersion)
-        var messages: [String] = []
-        switch outcome.resolution {
-        case .success(let res):
-            messages.append(res)
-        case .failure(let error):
-            messages.append(String(format: NSLocalizedString("alert.endfieldPatch.failure", comment: ""),
-                                   error.localizedDescription))
-        }
-        switch outcome.fpsX2 {
-        case .success(let res):
-            messages.append(res)
-        case .failure(let error):
-            messages.append(String(format: NSLocalizedString("alert.endfieldPatch.failure", comment: ""),
-                                   error.localizedDescription))
-        }
-
-        if case .failure(let error) = outcome.signing {
-            messages.append(String(format: NSLocalizedString("alert.endfieldPatch.failure", comment: ""),
-                                   error.localizedDescription))
-        }
-
-        resolutionPatchResult = messages.joined(separator: "\n")
     }
 
     // MARK: - Shader cache
