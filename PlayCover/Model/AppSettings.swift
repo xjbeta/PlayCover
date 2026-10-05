@@ -195,6 +195,9 @@ struct ExtraAppSettingsData: Codable {
     var endfieldGamepadMapKey = false
     var endfieldMouseDeltaScale: Double = 1.0
     var endfieldPluginFixes = false
+    var endfieldResolutionFix = false
+    var endfieldFpsFix = false
+    var endfieldHaptics = false
     var forcedRefreshRate: Int = 0
     init() {}
 
@@ -275,6 +278,9 @@ struct ExtraAppSettingsData: Codable {
         endfieldGamepadMapKey = try container.decodeIfPresent(Bool.self, forKey: .endfieldGamepadMapKey) ?? false
         endfieldMouseDeltaScale = try container.decodeIfPresent(Double.self, forKey: .endfieldMouseDeltaScale) ?? 1.0
         endfieldPluginFixes = try container.decodeIfPresent(Bool.self, forKey: .endfieldPluginFixes) ?? false
+        endfieldResolutionFix = try container.decodeIfPresent(Bool.self, forKey: .endfieldResolutionFix) ?? false
+        endfieldFpsFix = try container.decodeIfPresent(Bool.self, forKey: .endfieldFpsFix) ?? false
+        endfieldHaptics = try container.decodeIfPresent(Bool.self, forKey: .endfieldHaptics) ?? false
         forcedRefreshRate = try container.decodeIfPresent(Int.self, forKey: .forcedRefreshRate) ?? 0
     }
 
@@ -354,6 +360,9 @@ struct ExtraAppSettingsData: Codable {
         if let val = overrides["endfieldGamepadMapKey"] as? Bool { endfieldGamepadMapKey = val }
         if let val = overrides["endfieldMouseDeltaScale"] as? Double { endfieldMouseDeltaScale = val }
         if let val = overrides["endfieldPluginFixes"] as? Bool { endfieldPluginFixes = val }
+        if let val = overrides["endfieldResolutionFix"] as? Bool { endfieldResolutionFix = val }
+        if let val = overrides["endfieldFpsFix"] as? Bool { endfieldFpsFix = val }
+        if let val = overrides["endfieldHaptics"] as? Bool { endfieldHaptics = val }
         if let val = overrides["forcedRefreshRate"] as? Int { forcedRefreshRate = val }
     }
 }
