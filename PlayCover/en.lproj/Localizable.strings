@@ -122,8 +122,8 @@
 "settings.tab.endfield" = "Endfield";
 "settings.endfield.riskWarning" = "Warning: everything on this page modifies the game and may be detected by anti-cheat - your account could be banned. Use at your own risk.\nIf you do get banned, don't worry - the developer is banned with you. 🤓";
 "settings.toggle.endfieldGamepadMapKey" = "Gamepad Map Key Fix";
-"settings.toggle.endfieldGamepadMapKey.help" = "Keeps DeviceInfo.platform at 8 in gamepad mode so the view key (⧉) opens the map. Only affects Endfield.";
-"settings.endfield.gamepadMapKeyHint" = "Restores the map key on a controller. Keyboard/mouse switching is handled separately.";
+"settings.toggle.endfieldGamepadMapKey.help" = "Makes the gamepad view key (⧉) open the map. Only affects Endfield.";
+"settings.endfield.gamepadMapKeyHint" = "Fixes the gamepad view key (⧉) not opening the map. Keyboard/mouse switching is unaffected.";
 "settings.endfield.shaderCache" = "Shader Cache";
 "settings.endfield.shaderCacheHint" = "Removes the warm-up marker so the game recompiles shaders on next launch.";
 "settings.endfield.mouseDeltaScale" = "Mouse look scale: %.2f";

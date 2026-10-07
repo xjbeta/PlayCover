@@ -3,8 +3,8 @@
 //  PlayCover
 //
 //  The dedicated Endfield tab in the app settings. It owns the Endfield-only tools:
-//  the three runtime fixes (resolution, fps x2, haptics), the shader-cache reset, and the
-//  libUnityDesktopMode-gated fixes (gamepad map key, mouse delta). They are kept out of the
+//  the three runtime fixes (resolution, fps x2, haptics), the gamepad map key, the shader-cache
+//  reset, and the libUnityDesktopMode-gated fixes (mouse delta). They are kept out of the
 //  generic graphics tab.
 //
 //  The resolution / fps / haptics switches are plain settings flags: PlayTools reads them at
@@ -102,6 +102,21 @@ struct EndfieldView: View {
 
                 Divider()
 
+                HStack {
+                    Toggle("settings.toggle.endfieldGamepadMapKey", isOn: $gamepadMapKey)
+                        .help("settings.toggle.endfieldGamepadMapKey.help")
+                        .onAppear { gamepadMapKey = settings.extraSettings.endfieldGamepadMapKey }
+                        .onChange(of: gamepadMapKey) { _ in
+                            settings.extraSettings.endfieldGamepadMapKey = gamepadMapKey
+                        }
+                    Spacer()
+                }
+                Text("settings.endfield.gamepadMapKeyHint")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+
+                Divider()
+
                 Text("settings.endfield.pluginSection")
                     .bold()
 
@@ -126,20 +141,6 @@ struct EndfieldView: View {
                         }
                     }
                 }
-
-                HStack {
-                    Toggle("settings.toggle.endfieldGamepadMapKey", isOn: $gamepadMapKey)
-                        .help("settings.toggle.endfieldGamepadMapKey.help")
-                        .disabled(!hasPlugin)
-                        .onAppear { gamepadMapKey = settings.extraSettings.endfieldGamepadMapKey }
-                        .onChange(of: gamepadMapKey) { _ in
-                            settings.extraSettings.endfieldGamepadMapKey = gamepadMapKey
-                        }
-                    Spacer()
-                }
-                Text("settings.endfield.gamepadMapKeyHint")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
 
                 HStack {
                     Text(String(format: NSLocalizedString("settings.endfield.mouseDeltaScale", comment: ""),
