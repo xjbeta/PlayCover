@@ -108,6 +108,9 @@
 "settings.endfield.fpsFixHint" = "30/45/60 → 60/90/120；并解开引擎内部的帧率上限。";
 "settings.toggle.endfieldHaptics" = "恢复手柄震动";
 "settings.endfield.hapticsHint" = "修复手柄震动失效，并适配多马达手柄。";
+"settings.endfield.volumeBoost" = "音量增强: %.0f%%";
+"settings.endfield.volumeBoost.help" = "在游戏渲染出的音频上整体加增益，可超过游戏内 100% 的音量上限。100% 为关闭。";
+"settings.endfield.volumeBoostHint" = "绕过游戏音量上限（在 Wwise 输出之后加增益）。100% 关闭；150% 约 +3.5 dB。";
 "settings.button.endfieldShaderCache" = "清理着色器缓存";
 "alert.endfieldShaderCache.title" = "清理着色器缓存";
 "alert.endfieldShaderCache.message" = "删除预热标记,让游戏下次启动重新执行「编译着色器缓存」。系统更新后着色缓存失效、出现异常卡顿时使用。";

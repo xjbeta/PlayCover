@@ -108,6 +108,9 @@
 "settings.endfield.fpsFixHint" = "30/45/60 → 60/90/120, and lifts the engine's internal frame-rate cap.";
 "settings.toggle.endfieldHaptics" = "Restore controller rumble";
 "settings.endfield.hapticsHint" = "Fixes broken rumble and adds support for multi-motor controllers.";
+"settings.endfield.volumeBoost" = "Volume boost: %.0f%%";
+"settings.endfield.volumeBoost.help" = "Adds gain to the rendered audio, above the game's 100% cap. 100% = off.";
+"settings.endfield.volumeBoostHint" = "Bypasses the in-game volume cap (adds gain after Wwise renders). 100% = off, 150% ≈ +3.5 dB.";
 "settings.button.endfieldShaderCache" = "Clear Shader Cache";
 "alert.endfieldShaderCache.title" = "Clear Shader Cache";
 "alert.endfieldShaderCache.message" = "Removes the shader warm-up marker so the game re-runs 'Compiling Shader Cache' on next launch. Use this after a macOS update, when shaders must be recompiled and cause stutter.";

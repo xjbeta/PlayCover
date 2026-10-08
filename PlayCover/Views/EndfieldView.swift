@@ -28,6 +28,7 @@ struct EndfieldView: View {
     @State private var resolutionFix = false
     @State private var fpsFix = false
     @State private var hapticsFix = false
+    @State private var volumeBoost = 100.0
 
     // MARK: - Shader cache
     @State var showShaderCacheAlert = false
@@ -83,6 +84,22 @@ struct EndfieldView: View {
                     Spacer()
                 }
                 Text("settings.endfield.hapticsHint")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+
+                HStack {
+                    Text(String(format: NSLocalizedString("settings.endfield.volumeBoost", comment: ""),
+                                volumeBoost))
+                        .help("settings.endfield.volumeBoost.help")
+                    Spacer()
+                    Slider(value: $volumeBoost, in: 100...150, step: 5, label: { EmptyView() })
+                        .frame(width: 200)
+                        .onAppear { volumeBoost = settings.extraSettings.endfieldVolumeBoost }
+                        .onChange(of: volumeBoost) { _ in
+                            settings.extraSettings.endfieldVolumeBoost = volumeBoost
+                        }
+                }
+                Text("settings.endfield.volumeBoostHint")
                     .font(.caption)
                     .foregroundColor(.secondary)
 

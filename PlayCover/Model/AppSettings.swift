@@ -198,6 +198,7 @@ struct ExtraAppSettingsData: Codable {
     var endfieldResolutionFix = false
     var endfieldFpsFix = false
     var endfieldHaptics = false
+    var endfieldVolumeBoost: Double = 100
     var forcedRefreshRate: Int = 0
     init() {}
 
@@ -281,6 +282,7 @@ struct ExtraAppSettingsData: Codable {
         endfieldResolutionFix = try container.decodeIfPresent(Bool.self, forKey: .endfieldResolutionFix) ?? false
         endfieldFpsFix = try container.decodeIfPresent(Bool.self, forKey: .endfieldFpsFix) ?? false
         endfieldHaptics = try container.decodeIfPresent(Bool.self, forKey: .endfieldHaptics) ?? false
+        endfieldVolumeBoost = try container.decodeIfPresent(Double.self, forKey: .endfieldVolumeBoost) ?? 100
         forcedRefreshRate = try container.decodeIfPresent(Int.self, forKey: .forcedRefreshRate) ?? 0
     }
 
@@ -363,6 +365,7 @@ struct ExtraAppSettingsData: Codable {
         if let val = overrides["endfieldResolutionFix"] as? Bool { endfieldResolutionFix = val }
         if let val = overrides["endfieldFpsFix"] as? Bool { endfieldFpsFix = val }
         if let val = overrides["endfieldHaptics"] as? Bool { endfieldHaptics = val }
+        if let val = overrides["endfieldVolumeBoost"] as? Double { endfieldVolumeBoost = val }
         if let val = overrides["forcedRefreshRate"] as? Int { forcedRefreshRate = val }
     }
 }
