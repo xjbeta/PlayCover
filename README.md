@@ -1,154 +1,109 @@
-### A modified version of PlayCover, including experimental bugfixes and features.
-> It is recommended to use the official build in most cases, as the modified version may be unstable.
+<p align="center">
+  <b>English</b> · <a href="README.zh-Hans.md">简体中文</a>
+</p>
 
-### How to Use
-
-1. Download the latest release from [GitHub Actions](https://github.com/viatearz/PlayCover/actions/workflows/unsigned_release.yml).
-2. Install the app.
-3. Trust the app by running:
-    ``` bash
-    xattr -dr com.apple.quarantine /Applications/PlayCover.app
-    ```
-
-### Note
-
-For iOS apps that were already installed using the official build, you may need to perform the following steps:
-1.	Right-click the app icon, select `Settings`, and click `Reset Settings` at the bottom. This will restore the recommended configuration.
-2.	Reinstall the app, as some tweaks are only applied during installation.
-
-<br/>
-
----
-
-<div id="top"></div>
-
-‎<h1 align="center">[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![GPLv3 License][license-shield]][license-url]
-[![Weblate](https://img.shields.io/weblate/progress/playcover?style=for-the-badge)](https://hosted.weblate.org/projects/playcover/playcover/)
-</h1>
-
-
-
-<!-- PROJECT LOGO -->
-<br />
 <div align="center">
-  <a href="https://github.com/PlayCover/PlayCover">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a>
+  <img src="images/endfield-logo.png" alt="Logo" width="80" height="80">
 
-  <h3 align="center">PlayCover</h3>
+  <h3 align="center">PlayCover · Endfield Edition</h3>
 
   <p align="center">
-    Run iOS apps and games on Apple Silicon Macs with mouse, keyboard and controller support.
+    A fork of <a href="https://github.com/viatearz/PlayCover">viatearz/PlayCover</a> with extra patches for <em>Arknights: Endfield</em>
     <br />
     <br />
-    <a href="https://playcover.github.io/PlayBook">Documentation</a>
+    <a href="https://github.com/xjbeta/PlayCover/actions/workflows/unsigned_release.yml">Download build (GitHub Actions)</a>
     ·
-    <a href="https://discord.gg/RNCHsQHr3S">Discord</a>
+    <a href="https://playcover.github.io/PlayBook">Upstream docs</a>
     ·
     <a href="https://playcover.io/">Website</a>
   </p>
 </div>
 
-<!-- ABOUT THE PROJECT -->
-## About The Project
+> [!WARNING]
+> Everything in this fork modifies the game and may be detected by anti-cheat — **your account could be banned. Use at your own risk.**
 
-Welcome to PlayCover! This software is all about allowing you to run iOS apps and games on Apple Silicon devices running macOS 12.0 or newer.
+---
 
-PlayCover works by putting applications through a wrapper which imitates an iPad. This allows the apps to run natively and perform very well.
+## What this is
 
-PlayCover also allows you to map custom touch controls to keyboard, which is not possible in alternative sideloading methods such as Sideloadly. 
+This repository is a **fork of [viatearz/PlayCover](https://github.com/viatearz/PlayCover)**.
 
-These controls include all the essentials, from WASD, camera movement, left and right clicks, and individual keymapping, similar to a popular Android emulator’s keymapping system called Bluestacks.
+- `viatearz/PlayCover` is itself a modified build of [PlayCover](https://github.com/PlayCover/PlayCover) with experimental bugfixes and features.
+- On top of that, this fork **adds a set of extra patches and fixes specifically for _Arknights: Endfield_** (see "Endfield-specific features" below).
 
-This software was originally designed to run Genshin Impact on your Apple Silicon device, but it can now run a wide range of applications. Unfortunately, not all games are supported, and some may have bugs.
+> Everything other than the Endfield changes comes from the upstream projects above. This build is **experimental** and may be unstable; if you only need the general functionality, prefer the official or viatearz builds.
 
-Localisations handled in [Weblate](https://hosted.weblate.org/projects/playcover/).
+## Endfield-specific features
 
-![Fancy logo](./images/dark.png#gh-dark-mode-only)
-![Fancy logo](./images/light.png#gh-light-mode-only)
+The app settings get a dedicated **"Endfield" tab** containing the switches below. Every switch is **gated to Endfield only**
+(bundle id `com.hypergryph.endfield` / `com.gryphline.endfield.ios`) and has no effect on other apps.
 
-<p align="right"><a href="#top">⬆️ Back to top️</a></p>
+| Feature | Description |
+|---|---|
+| **Resolution Fix** | No longer pinned to the game's default 1080p; follows the "Resolution" and "Resolution Scale" options in the graphics settings |
+| **Double the frame-rate tiers** | 30/45/60 → 60/90/120, and lifts the engine's internal frame-rate cap |
+| **Restore controller rumble** | Fixes broken rumble (never rumbles / normal attacks don't rumble) and adds multi-motor support (left/right grips + left/right triggers, graded output) |
+| **Volume boost** | Bypasses the in-game 100% volume cap (adds gain after Wwise renders), 100–150%, 100% = off |
+| **Clear Shader Cache** | Removes the warm-up marker so the game re-runs "Compiling Shader Cache" on next launch. Use after a macOS update when stutter appears |
 
-<!-- GETTING STARTED -->
-## Getting Started
+### Fixes that require the keyboard/mouse plugin
 
-Follow the instructions below to get Genshin Impact, and many other games, up and running in no time.
+The following two depend on the third-party plugin **`libUnityDesktopMode`**; the switches stay disabled until it is installed.
+Download it from the [Bilibili video](https://www.bilibili.com/video/BV14xHz65Eiv), then install it inside PlayCover:
+right-click the app → **Settings → Misc → Custom Plugins → Add…**, pick the `.dylib` and confirm **Add Anyway**.
+PlayCover copies it into the app's `Frameworks/UserPlugins/`.
 
-### Prerequisites
+| Feature | Description |
+|---|---|
+| **Gamepad Map Key Fix** | Fixes the gamepad buttons misbehaving after the plugin is installed |
+| **Mouse look scale** | Fixes the camera turning too slowly with the mouse in keyboard/mouse mode (extra multiplier slider 0–3, 1.0 is the corrected value) |
 
-At the moment, PlayCover can only run on Apple Silicon Macs. This means that only devices with M-series SoCs (eg. M1) are supported.
+> **Keyboard/mouse mode switching** is handled by the plugin itself. This repository does not maintain that plugin; it only relies on its presence.
 
-If you have an Intel Mac, you can explore alternatives like Bootcamp or emulators.
+## How to Use
 
-### Download
+1. Manually trigger `Build unsigned release` in [GitHub Actions](https://github.com/xjbeta/PlayCover/actions/workflows/unsigned_release.yml)
+   and download the `PlayCover_custom_<run>.dmg` artifact.
+2. Install the app.
+3. Remove the quarantine attribute:
+   ```bash
+   xattr -dr com.apple.quarantine /Applications/PlayCover.app
+   ```
 
-You can download stable releases [here](https://github.com/PlayCover/PlayCover/releases), or build from source by following the instructions in the Documentation.
+### Migrating from the official build
 
-### Documentation
+If you already installed an app using the official (or another) build, it is recommended to:
 
-To learn how to setup and use PlayCover, visit the documentation [here](https://playcover.github.io/PlayBook).
+1. Right-click the app icon → `Settings` → click `Reset Settings` at the bottom to restore the recommended configuration.
+2. Reinstall the app, since some tweaks are only applied during installation.
 
-### Homebrew Cask
-We host a [Homebrew](https://brew.sh) tap with the [PlayCover cask](https://github.com/PlayCover/homebrew-playcover/blob/master/Casks/playcover-community.rb). To install from it run:
+## Building from source
 
-```sh
-brew install --cask PlayCover/playcover/playcover-community
+This fork depends on the `dev` branch of [xjbeta/PlayTools](https://github.com/xjbeta/PlayTools) (where the Endfield modules live).
+`Cartfile` already points there:
+
+```
+github "xjbeta/PlayTools" "dev"
 ```
 
-To uninstall:
-1. Remove PlayCover using `brew uninstall --cask playcover-community`;
-2. Untap `PlayCover/playcover` with `brew untap PlayCover/playcover`.
+The build steps are the same as upstream (Carthage + Xcode). Note that PlayCover's build phase **re-runs carthage**,
+so whatever `Cartfile` points to is what gets compiled.
 
-<p align="right"><a href="#top">⬆️ Back to top️</a></p>
-
-
-
-<!-- LICENSE -->
 ## License
 
-Distributed under the GPLv3 License. See `LICENSE` for more information.
+Distributed under the **GPLv3** License. See `LICENSE` for more information.
 
+## Acknowledgments
 
+- [PlayCover](https://github.com/PlayCover/PlayCover) — the original project, thanks to @iVoider;
+- [viatearz/PlayCover](https://github.com/viatearz/PlayCover) — the direct upstream of this fork;
+- The author of the `libUnityDesktopMode` plugin — provides keyboard/mouse mode switching (an external dependency not maintained here);
+- [DeepSeek](https://www.deepseek.com/) — assisted with the development of the Endfield patches.
 
-<!-- CONTACT -->
-## Contact
-
-Lucas Lee - playcover@lucas.icu
-
-Depal - depal@playcover.io
-
-
-
-
-<!-- ACKNOWLEDGMENTS -->
 ## Libraries Used
 
-These open source libraries were used to create this project.
-
-* [inject](https://github.com/paradiseduo/inject)
-* [PTFakeTouch](https://github.com/Ret70/PTFakeTouch)
-* [DownloadManager](https://github.com/shapedbyiris/download-manager)
-* [DataCache](https://github.com/huynguyencong/DataCache)
-* [SwiftUI CachedAsyncImage](https://github.com/bullinnyc/CachedAsyncImage)
-
-* Thanks to @iVoider for creating such a great project!
-
-<p align="right"><a href="#top">⬆️ Back to top️</a></p>
-
-
-
-<!-- MARKDOWN LINKS & IMAGES -->
-[contributors-shield]: https://img.shields.io/github/contributors/PlayCover/PlayCover.svg?style=for-the-badge
-[contributors-url]: https://github.com/PlayCover/PlayCover/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/PlayCover/PlayCover.svg?style=for-the-badge
-[forks-url]: https://github.com/PlayCover/PlayCover/network/members
-[stars-shield]: https://img.shields.io/github/stars/PlayCover/PlayCover.svg?style=for-the-badge
-[stars-url]: https://github.com/PlayCover/PlayCover/stargazers
-[issues-shield]: https://img.shields.io/github/issues/PlayCover/PlayCover.svg?style=for-the-badge
-[issues-url]: https://github.com/PlayCover/PlayCover/issues
-[license-shield]: https://img.shields.io/github/license/PlayCover/PlayCover.svg?style=for-the-badge
-[license-url]: https://github.com/PlayCover/PlayCover/blob/master/LICENSE
+- [inject](https://github.com/paradiseduo/inject)
+- [PTFakeTouch](https://github.com/Ret70/PTFakeTouch)
+- [DownloadManager](https://github.com/shapedbyiris/download-manager)
+- [DataCache](https://github.com/huynguyencong/DataCache)
+- [SwiftUI CachedAsyncImage](https://github.com/bullinnyc/CachedAsyncImage)
